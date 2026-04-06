@@ -62,10 +62,11 @@ export default function App() {
   };
 
   const startGame = () => {
+    setIsCorrect(null);
+    setScore(0);
     if (gameType === 'syllables') {
       setShuffledQuestions(shuffleArray(QUESTIONS));
       setCurrentQuestionIndex(0);
-      setScore(0);
     } else if (gameType === 'letters') {
       startLetterRound(0);
     } else {
@@ -77,6 +78,7 @@ export default function App() {
   };
 
   const startDayRound = (index: number, days: typeof DAYS_OF_WEEK) => {
+    setIsCorrect(null);
     setCurrentDayIndex(index);
     const correct = days[index].en;
     const others = DAYS_OF_WEEK.filter(d => d.en !== correct).map(d => d.en);
@@ -101,6 +103,7 @@ export default function App() {
   };
 
   const startLetterRound = (round: number) => {
+    setIsCorrect(null);
     const target = LETTERS[Math.floor(Math.random() * LETTERS.length)];
     setTargetLetter(target);
     setLetterRounds(round);
@@ -441,20 +444,29 @@ export default function App() {
               </div>
 
               <div className="space-y-4 max-w-xs mx-auto w-full">
-                <label className={`text-sm font-black uppercase tracking-widest ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}>
-                  ¿Cómo te llamas?
-                </label>
-                <input
-                  type="text"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                  placeholder="Tu nombre aquí..."
-                  className={`w-full px-6 py-4 rounded-2xl text-center font-bold text-xl border-2 transition-all outline-none ${
-                    theme === 'light' 
-                      ? 'bg-white border-slate-100 focus:border-brand-pink text-slate-800' 
-                      : 'bg-slate-800 border-slate-700 focus:border-dark-pink text-white'
-                  }`}
-                />
+                {!localStorage.getItem('cande_app_player_name') && (
+                  <>
+                    <label className={`text-sm font-black uppercase tracking-widest ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}>
+                      ¿Cómo te llamas?
+                    </label>
+                    <input
+                      type="text"
+                      value={playerName}
+                      onChange={(e) => setPlayerName(e.target.value)}
+                      placeholder="Tu nombre aquí..."
+                      className={`w-full px-6 py-4 rounded-2xl text-center font-bold text-xl border-2 transition-all outline-none ${
+                        theme === 'light' 
+                          ? 'bg-white border-slate-100 focus:border-brand-pink text-slate-800' 
+                          : 'bg-slate-800 border-slate-700 focus:border-dark-pink text-white'
+                      }`}
+                    />
+                  </>
+                )}
+                {localStorage.getItem('cande_app_player_name') && (
+                  <p className={`text-2xl font-display ${theme === 'light' ? 'text-brand-pink' : 'text-dark-pink'}`}>
+                    ¡Hola de nuevo, {playerName}!
+                  </p>
+                )}
               </div>
 
             <button
