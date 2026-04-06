@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Cat, Dog, PartyPopper, Calendar, Clock, MapPin, ChevronRight, RotateCcw, Heart, Star, Sun, Moon, Menu, X, Home, Gift, Lock } from 'lucide-react';
+import { Cat, Dog, PartyPopper, Calendar, Clock, MapPin, ChevronRight, RotateCcw, Heart, Star, Sun, Moon, Menu, X, Home, Gift, Lock, LogOut } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { QUESTIONS, EVENT_INFO, Question } from './constants';
 
@@ -32,10 +32,15 @@ export default function App() {
   const [isGamesUnlocked, setIsGamesUnlocked] = useState(false);
   const [showLockedMessage, setShowLockedMessage] = useState(false);
   const [playerName, setPlayerName] = useState(() => localStorage.getItem('cande_app_player_name') || '');
+  const [isNameConfirmed, setIsNameConfirmed] = useState(() => !!localStorage.getItem('cande_app_player_name'));
 
-  useEffect(() => {
-    localStorage.setItem('cande_app_player_name', playerName);
-  }, [playerName]);
+  const handleLogout = () => {
+    localStorage.removeItem('cande_app_player_name');
+    setPlayerName('');
+    setIsNameConfirmed(false);
+    setGameState('welcome');
+    setIsMenuOpen(false);
+  };
   
   // Syllable Game State
   const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>([]);
@@ -62,6 +67,10 @@ export default function App() {
   };
 
   const startGame = () => {
+    if (!isNameConfirmed && playerName.trim()) {
+      localStorage.setItem('cande_app_player_name', playerName);
+      setIsNameConfirmed(true);
+    }
     setIsCorrect(null);
     setScore(0);
     if (gameType === 'syllables') {
@@ -380,6 +389,18 @@ export default function App() {
                         </div>
                         <span className="font-bold text-sm">Modo {theme === 'light' ? 'Oscuro' : 'Claro'}</span>
                       </button>
+
+                      <button
+                        onClick={handleLogout}
+                        className={`w-full px-5 py-4 text-left rounded-2xl transition-all flex items-center gap-4 ${
+                          theme === 'light' ? 'hover:bg-red-50 text-red-600' : 'hover:bg-red-900/20 text-red-400'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${theme === 'light' ? 'bg-red-100 text-red-500' : 'bg-red-900/30 text-red-400'}`}>
+                          <LogOut size={20} />
+                        </div>
+                        <span className="font-bold text-sm">Cerrar Sesión</span>
+                      </button>
                     </div>
 
                     <AnimatePresence>
@@ -444,7 +465,7 @@ export default function App() {
               </div>
 
               <div className="space-y-4 max-w-xs mx-auto w-full">
-                {!localStorage.getItem('cande_app_player_name') && (
+                {!isNameConfirmed ? (
                   <>
                     <label className={`text-sm font-black uppercase tracking-widest ${theme === 'light' ? 'text-slate-400' : 'text-slate-500'}`}>
                       ¿Cómo te llamas?
@@ -453,6 +474,7 @@ export default function App() {
                       type="text"
                       value={playerName}
                       onChange={(e) => setPlayerName(e.target.value)}
+                      maxLength={20}
                       placeholder="Tu nombre aquí..."
                       className={`w-full px-6 py-4 rounded-2xl text-center font-bold text-xl border-2 transition-all outline-none ${
                         theme === 'light' 
@@ -461,8 +483,7 @@ export default function App() {
                       }`}
                     />
                   </>
-                )}
-                {localStorage.getItem('cande_app_player_name') && (
+                ) : (
                   <p className={`text-2xl font-display ${theme === 'light' ? 'text-brand-pink' : 'text-dark-pink'}`}>
                     ¡Hola de nuevo, {playerName}!
                   </p>
