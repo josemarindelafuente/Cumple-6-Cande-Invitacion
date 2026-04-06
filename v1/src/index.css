@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@300..700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fredoka", sans-serif;
+  
+  /* High Contrast Light Mode */
+  --color-brand-pink: #D81B60;
+  --color-brand-blue: #1976D2;
+  --color-brand-yellow: #FBC02D;
+  --color-brand-purple: #7B1FA2;
+  
+  /* High Contrast Dark Mode (will be used via classes) */
+  --color-dark-pink: #FF4081;
+  --color-dark-blue: #40C4FF;
+  --color-dark-yellow: #FFD740;
+  --color-dark-purple: #E040FB;
+}
+
+body {
+  @apply min-h-screen overflow-x-hidden transition-colors duration-300;
+}
+
+.light-theme {
+  @apply bg-[#FFF0F5] text-slate-900;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 14c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm-4.5-2c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm9 0c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm-6.5-3c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm4 0c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5z' fill='%23D81B60' fill-opacity='0.08'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+.dark-theme {
+  @apply bg-slate-900 text-slate-100;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255, 64, 129, 0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+.game-card {
+  @apply rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border-4 p-6 sm:p-10 w-full transition-all duration-300;
+}
+
+.light-theme .game-card {
+  @apply bg-white border-brand-pink/10;
+}
+
+.dark-theme .game-card {
+  @apply bg-slate-800 border-dark-pink/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)];
+}
+
+.syllable-btn {
+  @apply font-display text-lg sm:text-2xl px-2 py-4 rounded-3xl transition-all transform active:scale-90 shadow-lg flex items-center justify-center min-h-[64px] border-2;
+}
+
+.light-theme .syllable-btn {
+  @apply bg-white border-brand-blue/30 text-brand-blue hover:bg-brand-blue hover:text-white shadow-brand-blue/10;
+}
+
+.dark-theme .syllable-btn {
+  @apply bg-slate-700 border-dark-blue/30 text-dark-blue hover:bg-dark-blue hover:text-white shadow-dark-blue/10;
+}
+
+.option-btn {
+  @apply font-display text-lg sm:text-xl px-6 py-5 rounded-3xl transition-all transform active:scale-95 shadow-lg w-full text-center leading-tight min-h-[70px] flex items-center justify-center border-2;
+}
+
+.light-theme .option-btn {
+  @apply bg-white border-brand-purple/30 text-brand-purple hover:bg-brand-purple hover:text-white shadow-brand-purple/10;
+}
+
+.dark-theme .option-btn {
+  @apply bg-slate-700 border-dark-purple/30 text-dark-purple hover:bg-dark-purple hover:text-white shadow-dark-purple/10;
+}
+
+.answer-slot {
+  @apply min-w-[55px] sm:min-w-[75px] h-[55px] sm:h-[70px] border-b-4 mx-1 flex items-center justify-center font-display text-2xl sm:text-3xl rounded-t-2xl transition-colors duration-300;
+}
+
+.light-theme .answer-slot {
+  @apply border-brand-pink text-brand-pink bg-brand-pink/5;
+}
+
+.dark-theme .answer-slot {
+  @apply border-dark-pink text-dark-pink bg-dark-pink/10;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded-full;
+}
+.light-theme::-webkit-scrollbar-thumb { @apply bg-brand-pink/40; }
+.dark-theme::-webkit-scrollbar-thumb { @apply bg-dark-pink/40; }
+
